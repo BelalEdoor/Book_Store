@@ -1,0 +1,82 @@
+﻿@model BookDisplayModel
+@{
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-center">Featured Books</h2>
+
+    <!-- Search & Filter Form -->
+    <form method="get" class="row g-3 mb-4 align-items-center">
+        <!-- Search by Name -->
+        <div class="col-12 col-md-6">
+            <input type="text" name="sTerm" id="sterm" value="@Model.STerm" class="form-control" placeholder="Search by title..." />
+        </div>
+
+        <!-- Filter by Genre -->
+        <div class="col-12 col-md-4">
+            <label class="visually-hidden" for="genreId">Genre</label>
+            <select name="genreId" class="form-select" id="genreId">
+                <option value="0">All Genres</option>
+                @foreach(var genre in Model.Genres)
+                {
+                    <option selected=@(genre.Id == Model.GenreId) value="@genre.Id">@genre.GenreName</option>
+                }
+                
+               
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <!-- Books Cards -->
+    <div class="row g-4">
+        @foreach (var book in Model.Books)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                    @if (string.IsNullOrWhiteSpace(book.Image))
+                    {
+                        <img src="/Images/NoImage.png" style="width:80px;height:100px" alt="book image" />
+                    }
+                    else
+                    {
+                        <img src="/images/@book.Image" style="width:80px;height:100px" alt="book image" />
+                    }
+                       <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@book.BookName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.GenreName</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.AuthorName </h6>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.Price</h6>
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-primary">View Summery</a>
+                            <button type="button" onclick="add(@book.Id)" class="btn btn-secondary">Add to Cart </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        async function add(bookId){
+            try{
+                var response = await fetch(`/Cart/AddItem?bookId=${bookId}`);
+                if(response.status==200){
+                    var result = await response.json();
+                    var cartcountEL = document.getElementById("cartcount");
+                    cartcountEL.innerHTML = result;
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+    </script>
+}
+
+}
