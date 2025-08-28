@@ -5,9 +5,9 @@
 <ul class="navbar-nav ms-auto align-items-center">
     <!-- Cart Icon -->
     <li class="nav-item">
-        <a class="nav-link text-light position-relative" href="/Cart">
+        <a class="nav-link text-light position-relative" href="/Cart/GetUserCart">
             <i class="bi bi-cart3 fs-5"></i>
-            <span id="cartcount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 0
                 <span class="visually-hidden">items in cart</span>
             </span>
@@ -18,7 +18,7 @@
         <!-- User Greeting -->
         <li class="nav-item me-3">
             <a class="nav-link text-light d-flex align-items-center" asp-area="Identity" asp-page="/Account/Manage/Index">
-                <i class="bi bi-person-circle me-1"></i> Hello @User.Identity?.Name!
+                <i class="bi bi-person-circle me-1"></i> Hello /<br /> <span id="username">@User.Identity?.Name</span> !
                 @if (User.IsInRole("Admin"))
                 {
                     <span class="badge bg-danger ms-2">Admin</span>

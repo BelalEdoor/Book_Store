@@ -1,0 +1,64 @@
+﻿@model ShoppingCart
+
+@if (Model != null && Model.CartDetails != null && Model.CartDetails.Count > 0)
+{
+    <div class="container mt-5">
+        <h2 class="mb-4">🛒 My Cart</h2>
+
+        <table class="table table-bordered text-center align-middle shadow-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Book</th>
+                    <th>Image</th>
+                    <th>Genre</th>
+                    <th>Unit Price (INR)</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartDetails)
+                {
+                    <tr>
+                        <td>@item.Book.BookName</td>
+                        <td>
+                            <img src="@(string.IsNullOrEmpty(item.Book.Image) ? "/images/NoImage.png" : "/images/" + item.Book.Image)"
+                                 alt="Book Image"
+                                 style="width:70px; height:90px; object-fit:cover;" />
+                        </td>
+                        <td>@item.Book.Genre.GenreName</td>
+                        <td>₹ @item.Book.Price</td>
+                        <td>@item.Quantity</td>
+                        <td>₹ @(item.Book.Price* item.Quantity)</td>
+                        <td>
+                            <a asp-action="Increase" asp-route-bookId="@item.Book.Id" class="btn btn-success btn-sm">
+                                <i class="bi bi-plus-lg"></i>
+                            </a>
+                            <a asp-action="Decrease" asp-route-bookId="@item.Book.Id" class="btn btn-warning btn-sm">
+                                <i class="bi bi-dash-lg"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-bookId="@item.Book.Id" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <h4>Total (INR): <strong>₹ @(Model.CartDetails.Select(item => item.Book.Price * item.Quantity).Sum())</strong></h4>
+            <a href="/" class="btn btn-success btn-lg">
+                <i class="bi bi-credit-card" href="/Cart/Checkout"></i> Checkout
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center my-5">
+        <h3 class="text-muted">🛍️ Your cart is empty</h3>
+        <a href="/" class="btn btn-primary mt-3">Continue Shopping</a>
+    </div>
+}

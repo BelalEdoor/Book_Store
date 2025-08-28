@@ -7,11 +7,13 @@ namespace BookShopping_Ecommerce.Models
     public class ShoppingCart
     {
         public int Id { get; set; }
+
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;  // لتجنب null
+
         public bool IsDeleted { get; set; } = false;
 
-        public ICollection<CartDetails> CartDetails { get; set; }
-
+        // تهيئة الـ collection لتجنب مشاكل null
+        public ICollection<CartDetails> CartDetails { get; set; } = new List<CartDetails>();
     }
 }

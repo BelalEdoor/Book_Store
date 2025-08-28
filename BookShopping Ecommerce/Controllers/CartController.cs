@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BookShopping_Ecommerce.Repositories;
 
 namespace BookShopping_Ecommerce.Controllers
 {
@@ -11,30 +12,63 @@ namespace BookShopping_Ecommerce.Controllers
         {
             _cartRepo = cartRepo;
         }
+
+        // ➕ إضافة منتج أو زيادة كمية
         public async Task<IActionResult> AddItem(int bookId, int qty = 1, int redirect = 0)
         {
             var cartCount = await _cartRepo.AddItem(bookId, qty);
-            if (redirect == 0)
+
+            if (redirect == 0) // ajax call
                 return Ok(cartCount);
+
             return RedirectToAction("GetUserCart");
         }
 
-        public async Task<IActionResult> RemoveItem(int bookId)
+
+        // ⬆️ زيادة
+        public async Task<IActionResult> Increase(int bookId)
         {
-            var cartCount = await _cartRepo.RemoveItem(bookId);
+            await _cartRepo.AddItem(bookId, 1);
             return RedirectToAction("GetUserCart");
         }
+
+        // ⬇️ إنقاص
+        public async Task<IActionResult> Decrease(int bookId)
+        {
+            await _cartRepo.RemoveItem(bookId, 1);
+            return RedirectToAction("GetUserCart");
+        }
+
+        // ❌ حذف كامل للمنتج
+        public async Task<IActionResult> Delete(int bookId)
+        {
+            await _cartRepo.DeleteItem(bookId); // ⬅️ استدعاء الميثود الجديد
+            return RedirectToAction("GetUserCart");
+        }
+
+        // 🛒 عرض الكارت
         public async Task<IActionResult> GetUserCart()
         {
             var cart = await _cartRepo.GetUserCart();
             return View(cart);
         }
 
+        // 🔢 إرجاع عدد المنتجات
         public async Task<IActionResult> GetTotalItemInCart()
         {
             int cartItem = await _cartRepo.GetCartItemCount();
             return Ok(cartItem);
         }
+        public async Task<IActionResult> DoCheckout()
+        {
+            bool isCheckout = await _cartRepo.DoCheckout();
+            if (!isCheckout)
+                throw new Exception("Something happen in server side ");
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
 
     }
 }

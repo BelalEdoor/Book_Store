@@ -13,7 +13,10 @@ namespace BookShopping_Ecommerce.Models
 
         [Required]
         public int BookId { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
+        public double UnitPrice { get; set; }
 
         [Required]
         public Book Book { get; set; }

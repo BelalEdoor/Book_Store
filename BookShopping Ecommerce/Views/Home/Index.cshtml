@@ -53,7 +53,9 @@
                         <h6 class="card-subtitle mb-2 text-muted">@book.Price</h6>
                         <div class="d-grid gap-2">
                             <a href="#" class="btn btn-primary">View Summery</a>
-                            <button type="button" onclick="add(@book.Id)" class="btn btn-secondary">Add to Cart </button>
+                            <a href="/Cart/AddItem?bookId=@book.Id" class="btn btn-primary add-to-cart" data-id="@book.Id">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,18 +66,50 @@
 @section Scripts {
     <script>
         async function add(bookId){
+            var usernamEL = document.getElementById("username");
+            if(usernamEL ==null)
+            {
+                window.location.href="/Identity/Account/Login"
+            //     var username = usernamEL.innerText;
+            // if (username < 1)
+            // {
+            // }
+            }
             try{
                 var response = await fetch(`/Cart/AddItem?bookId=${bookId}`);
                 if(response.status==200){
                     var result = await response.json();
                     var cartcountEL = document.getElementById("cartcount");
                     cartcountEL.innerHTML = result;
+                    window.location.href = "#cartcount"
                 }
             }
             catch(err){
                 console.log(err);
             }
         }
+             // Event Listener for Add To Cart
+        document.addEventListener("click", async function (e) {
+            if (e.target.closest(".add-to-cart")) {
+                e.preventDefault();
+                let btn = e.target.closest(".add-to-cart");
+                let bookId = btn.getAttribute("data-id");
+
+                try {
+                    let response = await fetch(`/Cart/AddItem?bookId=${bookId}&qty=1`);
+                    if (response.ok) {
+                        let result = await response.json();
+                        // تحديث البادج
+                        let cartCountEl = document.getElementById("cartCount");
+                        if (cartCountEl) {
+                            cartCountEl.innerText = result;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error adding to cart:", err);
+                }
+            }
+        });
     </script>
 }
 

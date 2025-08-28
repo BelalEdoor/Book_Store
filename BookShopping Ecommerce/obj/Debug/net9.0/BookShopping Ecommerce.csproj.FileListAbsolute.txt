@@ -434,3 +434,4 @@ D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\Boo
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\bin\Debug\net9.0\FluentAssertions.dll
+D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\BookShopping Ecommerce.sourcelink.json
