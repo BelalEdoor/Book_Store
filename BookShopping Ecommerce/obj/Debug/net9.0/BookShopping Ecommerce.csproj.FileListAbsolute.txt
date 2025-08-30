@@ -277,8 +277,6 @@ D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\Boo
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\tzpbu1wpl8-muycvpuwrr.gz
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\5yavjo644f-87fc7y1x7t.gz
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\tscuqxdjfb-mlv21k5csn.gz
-D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\fidm0ihmf1-i7eieipal4.gz
-D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\6mbrlm0llb-i7eieipal4.gz
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\staticwebassets.build.json
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\staticwebassets.development.json
@@ -872,3 +870,5 @@ D:\Trainings\6- Back-end development (Trusted Systems)🎓\API Project\Ecommerce
 D:\Trainings\6- Back-end development (Trusted Systems)🎓\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\BookShopping Ecommerce.pdb
 D:\Trainings\6- Back-end development (Trusted Systems)🎓\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\BookShopping Ecommerce.genruntimeconfig.cache
 D:\Trainings\6- Back-end development (Trusted Systems)🎓\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\ref\BookShopping Ecommerce.dll
+D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\fidm0ihmf1-i7eieipal4.gz
+D:\Trainings\6- Back-end development (Trusted Systems)\API Project\Ecommerce\BookShopping Ecommerce\BookShopping Ecommerce\obj\Debug\net9.0\compressed\6mbrlm0llb-i7eieipal4.gz

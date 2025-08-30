@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lyfOkFhAokk=",
+  "dgSpecHash": "5Vdeslg5y6M=",
   "success": true,
-  "projectFilePath": "D:\\Trainings\\6- Back-end development (Trusted Systems)\uD83C\uDF93\\API Project\\Ecommerce\\BookShopping Ecommerce\\BookShopping Ecommerce\\BookShopping Ecommerce.csproj",
+  "projectFilePath": "D:\\Trainings\\6- Back-end development (Trusted Systems)\\API Project\\Ecommerce\\BookShopping Ecommerce\\BookShopping Ecommerce\\BookShopping Ecommerce.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hp\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

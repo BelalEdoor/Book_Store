@@ -36,27 +36,11 @@
                     @* هذه بس للـ Admin *@
                     @if (User.IsInRole(Roles.Admin.ToString()))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/AdminOperations/AllOrders">Orders</a>
-                        </li>
+    
                         <li class="nav-item">
                             <a class="nav-link" href="/AdminOperations/Dashboard">Dashboard</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Stock/Index">Stock</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Genre/Index">Genre</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Book/Index">Books</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Reports/TopFiveSellingBooks">
-                                <i class="bi bi-bar-chart"></i> Top Selling Items
-                            </a>
-                        </li>
+                        
 
 
                     }
