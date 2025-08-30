@@ -59,15 +59,30 @@ namespace BookShopping_Ecommerce.Controllers
             int cartItem = await _cartRepo.GetCartItemCount();
             return Ok(cartItem);
         }
-        public async Task<IActionResult> DoCheckout()
+        public IActionResult DoCheckout()
         {
-            bool isCheckout = await _cartRepo.DoCheckout();
-            if (!isCheckout)
-                throw new Exception("Something happen in server side ");
-            return RedirectToAction("Index", "Home");
-
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DoCheckout(CheckoutModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+            bool isCheckout = await _cartRepo.DoCheckout(model);
+            if (!isCheckout)
+                return RedirectToAction(nameof(OrderFailure));
+            return RedirectToAction(nameof(OrderSucces));
+
+        }
+        public IActionResult OrderSucces()
+        {
+            return View();
+        }
+        public IActionResult OrderFailure()
+        {
+            return View();
+        }
 
 
     }

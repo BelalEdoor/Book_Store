@@ -1,6 +1,8 @@
 ﻿using BookShopping_Ecommerce.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookShopping_Ecommerce.Repositories
 {
@@ -33,7 +35,7 @@ namespace BookShopping_Ecommerce.Repositories
             try
             {
                 if (string.IsNullOrEmpty(userId))
-                    throw new Exception("user not logged-in");
+                    throw new UnauthorizedAccessException("user not logged-in");
 
                 var cart = await GetCart(userId);
                 if (cart is null)
@@ -80,17 +82,17 @@ namespace BookShopping_Ecommerce.Repositories
             try
             {
                 if (string.IsNullOrEmpty(userId))
-                    throw new Exception("user not logged-in");
+                    throw new UnauthorizedAccessException("user not logged-in");
 
                 var cart = await GetCart(userId);
                 if (cart is null)
-                    throw new Exception("invalid cart");
+                    throw new InvalidOperationException("invalid cart");
 
                 var cartItem = await _db.CartDetails
                     .FirstOrDefaultAsync(a => a.shoppingcartid == cart.Id && a.BookId == bookId);
 
                 if (cartItem is null)
-                    throw new Exception("no items in cart");
+                    throw new InvalidOperationException("no items in cart");
 
                 if (cartItem.Quantity <= qty)
                     _db.CartDetails.Remove(cartItem);
@@ -148,7 +150,10 @@ namespace BookShopping_Ecommerce.Repositories
             return await _db.ShoppingCarts
                 .Include(a => a.CartDetails)
                 .ThenInclude(a => a.Book)
-                .ThenInclude(a => a.Genre)
+                .ThenInclude(b => b.Genre)
+                .Include(a => a.CartDetails)
+                .ThenInclude(a => a.Book)
+                .ThenInclude(b => b.Stock) // ✅ هنا ضفت الـ Stock
                 .FirstOrDefaultAsync(a => a.UserId == userId);
         }
 
@@ -160,68 +165,93 @@ namespace BookShopping_Ecommerce.Repositories
                 .FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
-        // 🔢 عدد المنتجات في الكارت
+        // 🔢 عدد المنتجات الفريدة في الكارت
         public async Task<int> GetCartItemCount(string userId = "")
         {
             if (string.IsNullOrEmpty(userId))
                 userId = GetUserId();
 
-            var data = await (from cart in _db.ShoppingCarts
-                              join cartDetail in _db.CartDetails
-                                  on cart.Id equals cartDetail.shoppingcartid
-                              where cart.UserId == userId
-                              select cartDetail.Quantity).ToListAsync();
-
-            return data.Sum();
+            return await (from cart in _db.ShoppingCarts
+                          join cartDetail in _db.CartDetails
+                              on cart.Id equals cartDetail.shoppingcartid
+                          where cart.UserId == userId
+                          select cartDetail.BookId)
+                          .Distinct()
+                          .CountAsync();
         }
-        public async Task<bool> DoCheckout()
+
+        public async Task<bool> DoCheckout(CheckoutModel model)
         {
-            using var transaction = _db.Database.BeginTransaction();
+            await using var transaction = await _db.Database.BeginTransactionAsync();
             try
             {
-                // logic
-                // move data from cartDetail to order and order detail then we will remove cart detail
                 var userId = GetUserId();
                 if (string.IsNullOrEmpty(userId))
                     throw new UnauthorizedAccessException("User is not logged-in");
+
                 var cart = await GetCart(userId);
                 if (cart is null)
                     throw new InvalidOperationException("Invalid cart");
+
                 var cartDetail = _db.CartDetails
-                                   .Where(a => a.shoppingcartid == cart.Id).ToList();
+                                    .Where(a => a.shoppingcartid == cart.Id)
+                                    .ToList();
                 if (cartDetail.Count == 0)
                     throw new InvalidOperationException("Cart is empty");
+
                 var pendingRecord = _db.OrderStatuses.FirstOrDefault(s => s.Name == "Pending");
                 if (pendingRecord is null)
                     throw new InvalidOperationException("Order status does not have Pending status");
+
+                // إنشاء الطلب
                 var order = new Order
                 {
                     UserId = userId,
                     CreateDate = DateTime.UtcNow,
-                    OrderStatusId = 1,
+                    Name = model.Name,
+                    Email = model.Email,
+                    MobileNumber = model.MobileNumber,
+                    PaymentMethod = model.PaymentMethod,
+                    Address = model.Address,
+                    IsPaid = false,
+                    OrderStatusId = pendingRecord.Id
                 };
+
                 _db.Orders.Add(order);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
+
+                // إضافة تفاصيل الطلب + خصم من المخزون
                 foreach (var item in cartDetail)
                 {
-                    var orderDetail = new OrderDetails
+                    var orderdetail = new OrderDetails
                     {
                         BookId = item.BookId,
                         OrderId = order.Id,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     };
-                    _db.OrderDetails.Add(orderDetail);
-                }
-                _db.SaveChanges();
+                    _db.OrderDetails.Add(orderdetail);
 
-                _db.CartDetails.RemoveRange(cartDetail);
-                _db.SaveChanges();
-                transaction.Commit();
+                    var stock = await _db.Stocks.FirstOrDefaultAsync(a => a.BookId == item.BookId);
+                    if (stock == null)
+                        throw new InvalidOperationException("stock is null");
+
+                    if (item.Quantity > stock.Quantity)
+                        throw new InvalidOperationException($"Only {stock.Quantity} items are available in the stock");
+
+                    stock.Quantity -= item.Quantity;
+                }
+
+                // حذف جميع عناصر الكارت بعد نسخها كطلبات
+                _db.CartDetails.RemoveRange(cart.CartDetails);
+                await _db.SaveChangesAsync();
+                await transaction.CommitAsync();
+
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                await transaction.RollbackAsync();
                 return false;
             }
         }

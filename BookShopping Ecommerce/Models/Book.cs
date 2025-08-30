@@ -27,7 +27,9 @@ public class Book
 
     public List<OrderDetails> OrderDetails { get; set; }
     public List<CartDetails> CartDetails { get; set; }
+    public Stock Stock { get; set; }
 
     [NotMapped]
-    public string GenreName { get; set; }   
+    public string GenreName { get; set; }
+    public int Quantity { get; internal set; }
 }

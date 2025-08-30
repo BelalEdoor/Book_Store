@@ -17,6 +17,6 @@ namespace BookShopping_Ecommerce.Data
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public object Stocks { get; internal set; }
-    }
+        public DbSet<Stock> Stocks { get; set; }
+     }
 }

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<StockDisplayModel>
+@{
+    Layout = "_AdminLayout";
+}
+<h2>Stocks</h2>
+
+<form asp-action="Index" method="get" class="my-2 d-flex gap-2">
+    <input type="text" name="sTerm" class="form-control w-25" placeholder="Search by book" />
+    <button type="submit" class="btn btn-primary">Find</button>
+    <a asp-action="Index" asp-controller="Stock" class="btn btn-secondary" type="button">Clear</a>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Book</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BookName</td>
+                <td class="text-center">@item.Quantity</td>
+                <td>
+                    <a asp-action="ManageStock" asp-controller="Stock" asp-route-bookId="@item.BookId" class="btn btn-info">
+                        Update Stock
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["successMessage"] != null)
+{
+    <div class="alert alert-success mt-2">@TempData["successMessage"]</div>
+}
+@if (TempData["errorMessage"] != null)
+{
+    <div class="alert alert-danger mt-2">@TempData["errorMessage"]</div>
+}

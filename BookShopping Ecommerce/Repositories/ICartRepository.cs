@@ -8,6 +8,6 @@
         Task<ShoppingCart> GetUserCart();                       // 🛒 كارت المستخدم الحالي
         Task<int> GetCartItemCount(string userId = "");         // 🔢 عدد المنتجات
         Task<ShoppingCart> GetCart(string userId);              // 🛒 كارت حسب userId
-        Task<bool> DoCheckout();
+        Task<bool> DoCheckout(CheckoutModel model);
     }
 }
